@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/pixelame-web/static/css/main.15110e50.chunk.css",
+    "main.js": "/pixelame-web/static/js/main.c4b44bca.chunk.js",
+    "main.js.map": "/pixelame-web/static/js/main.c4b44bca.chunk.js.map",
+    "runtime-main.js": "/pixelame-web/static/js/runtime-main.3b9aa378.js",
+    "runtime-main.js.map": "/pixelame-web/static/js/runtime-main.3b9aa378.js.map",
+    "static/js/2.08c6eb30.chunk.js": "/pixelame-web/static/js/2.08c6eb30.chunk.js",
+    "static/js/2.08c6eb30.chunk.js.map": "/pixelame-web/static/js/2.08c6eb30.chunk.js.map",
+    "index.html": "/pixelame-web/index.html",
+    "precache-manifest.2883245074042c2d3c1a3a599009013d.js": "/pixelame-web/precache-manifest.2883245074042c2d3c1a3a599009013d.js",
+    "service-worker.js": "/pixelame-web/service-worker.js",
+    "static/css/main.15110e50.chunk.css.map": "/pixelame-web/static/css/main.15110e50.chunk.css.map",
+    "static/js/2.08c6eb30.chunk.js.LICENSE.txt": "/pixelame-web/static/js/2.08c6eb30.chunk.js.LICENSE.txt",
+    "static/media/britta.png": "/pixelame-web/static/media/britta.65342444.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.3b9aa378.js",
+    "static/js/2.08c6eb30.chunk.js",
+    "static/css/main.15110e50.chunk.css",
+    "static/js/main.c4b44bca.chunk.js"
+  ]
+}
