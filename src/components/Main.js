@@ -26,13 +26,24 @@ class Main extends Component {
         [255,255,255]
       ]
 
+
+    createImage = src => {
+
+        const image = new Image();
+
+        image.src = src;
+
+        return image;
+
+    }
+
     state = {
         withPalette: true,
         square: false,
         distance: 1,
         pixelsToConvert: 20,
         paletteSelected: this.palette,
-        file: britta
+        image: this.createImage(britta)
     }
 
     handleInputChange = (event) => {
@@ -53,9 +64,18 @@ class Main extends Component {
         const value = URL.createObjectURL(target.files[0])
         const name =  target.name;
 
-        this.setState({
-            [name]: value    
-        });
+        const image = this.createImage(value);
+
+        image.onload = () => {
+
+            this.setState({
+                [name]: value,
+                image: image   
+            });
+
+        }
+
+        
 
     }
 
@@ -67,29 +87,47 @@ class Main extends Component {
 
         const name = target.name;
 
+        const nameArray = name.split(",");
+
+        const nameColor = [ Number(nameArray[0]), Number(nameArray[1]), Number(nameArray[2]) ];
+
+        console.log(nameColor);
+
         if (value) {
 
             const palette = this.state.paletteSelected;
-            palette.push(name);
+
+            palette.push(nameColor);
 
             this.setState({ paletteSelected: palette})
         } else {
-            this.setState({ paletteSelected: this.state.paletteSelected.find(color => color !== name).map(color => [color])})
+
+            const palette = this.state.paletteSelected;
+
+            this.setState({ paletteSelected: palette.filter(color => {
+
+                console.log(color, nameColor, color.includes(nameColor), color.every(v => nameColor.includes(v)));
+                
+                return !color.every(v => nameColor.includes(v));
+                
+            })})
         }
+
+        //console.log("PALETTE", this.state.paletteSelected);
 
     }
 
     render() {
 
-        const { withPalette, square, distance, pixelsToConvert, file } = this.state;
+        const { withPalette, square, distance, pixelsToConvert, file, image } = this.state;
 
-        console.log("file", file);
+       //console.log("file", file);
         
         return (
             <div>
                 <div className="main">
                     <div className="App-img">
-                        <img src={file} className="img" />
+                        <img src={file} className="img" alt="img" />
                     </div>
                     <div className="parameters">
                         <div>
@@ -124,10 +162,13 @@ class Main extends Component {
                     </div>
                     <div className="parameters">
                         <div>
-                            Select palette colors (Does not work for now)
+                            Select palette colors
                             {
                                 this.palette.map((color, index) => {
-                                    return <div key={color}><input 
+                                    return <div key={color} 
+                                    style={{
+                                        backgroundColor: `rgba(${color[0]},${color[1]},${color[2]},${(255)})`,
+                                        color: `rgba(${255 - color[0]},${255 - color[1]},${255 - color[2]},${(255)})`}} ><input 
                                         name={color}
                                         type="checkbox"
                                         checked={this.state.paletteSelected.find(found => found === color)}
@@ -140,7 +181,7 @@ class Main extends Component {
                     </div>
                 </div>
                 <PixelateGroup 
-                    src={file}
+                    image={image}
                     withPalette={withPalette}
                     type={square ? 'square' : 'circle'}
                     distance={distance}

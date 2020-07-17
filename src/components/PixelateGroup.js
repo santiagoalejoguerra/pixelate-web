@@ -24,17 +24,18 @@ class PixelateGroup extends React.Component {
 
     createImage(src) {
 
-        console.log("create image:", src);
+        //this.image.src = src;
 
-        this.image.src = src;
+        this.image = src;
 
     }
 
     render() {
 
-        this.createImage(this.props.src);
+        this.createImage(this.props.image);
 
-        const { withPalette, type, distance, pixelsToConvert } = this.props;
+        const { withPalette, type, distance, pixelsToConvert, paletteSelected } = this.props;
+
 
         const height = [...Array(Math.floor((this.image.height * pixelsToConvert) / this.image.width) + 1).keys()];
 
@@ -42,16 +43,14 @@ class PixelateGroup extends React.Component {
 
         this.arrayColors = [];
 
-        this.arrayColors = paintPixels(this.image, pixelsToConvert, this.state.palette, withPalette);
+        this.arrayColors = paintPixels(this.image, pixelsToConvert, paletteSelected, withPalette);
 
         this.counts = {};
 
-        let dictionary = new Object();
+        let dictionary = {};
 
         this.arrayColors.forEach((color, index) => {
             this.counts[color] = (this.counts[color] + 1) || 1;
-
-            //console.log(index, pixelsToConvert, index % pixelsToConvert, Math.floor(index / pixelsToConvert));
 
              dictionary[index] = 
                  [[Math.floor(index / pixelsToConvert), index % pixelsToConvert],
@@ -94,14 +93,6 @@ function convertPixels(height, width, type, distance, arrayColors) {
     const colorDefault = 'black';
 
     var color;
-
-    if (arrayColors && arrayColors[count]) {
-
-        // height = arrayColors
-
-        console.log(arrayColors.length);
-
-    }
 
     return height.map(n => {
         return <div width="100%" key={n} style={{ margin: distance - 8, display: "block ruby" }}>
@@ -168,7 +159,7 @@ function paintPixels(img, pixelsToConvert, palette, withPalette) {
 
                 let rgba = context.getImageData(xColorPick, yColorPick, 1, 1).data;
 
-                if (withPalette) {
+                if (withPalette && palette.length > 0) {
 
                     rgba = similarColor(rgba, palette);
 
