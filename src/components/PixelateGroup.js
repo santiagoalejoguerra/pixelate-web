@@ -17,51 +17,27 @@ class PixelateGroup extends React.Component {
 
         this.state = {
             distance: 1,
-            palette: [
-                [140,143,174],
-                [88,69,99],
-                [62,33,55],
-                [154,99,72],
-                [215,155,125],
-                [245,237,186],
-                [192,199,65],
-                [100,125,52],
-                [228,148,58],
-                [157,48,59],
-                [210,100,113],
-                [112,55,127],
-                [126,196,193],
-                [52,133,157],
-                [23,67,75],
-                [31,14,28],
-                [0,0,0],
-                [255,255,255]
-              ]
+            palette: props.paletteSelected
         };
 
     }
 
-    createImage() {
+    createImage(src) {
 
-        const { withPalette, pixelsToConvert } = this.props;
+        console.log("create image:", src);
 
-        this.image.src = this.props.src;
-        this.image.onload = () => {
-             this.arrayColors = paintPixels(this.image, pixelsToConvert, this.state.palette, withPalette);
-             this.arrayColors.forEach(color => {
-                this.counts[color] = (this.counts[color] + 1) || 1;
-            });
-             this.forceUpdate();
-        };
+        this.image.src = src;
 
     }
 
     render() {
 
+        this.createImage(this.props.src);
+
         const { withPalette, type, distance, pixelsToConvert } = this.props;
 
-        const height = [...Array(pixelsToConvert).keys()];
-        
+        const height = [...Array(Math.floor((this.image.height * pixelsToConvert) / this.image.width) + 1).keys()];
+
         const width = [...Array(pixelsToConvert).keys()];
 
         this.arrayColors = [];
@@ -87,8 +63,10 @@ class PixelateGroup extends React.Component {
 
         const counts = this.counts;
 
-        return <div style={{backgroudColor: 'black'}}>
-            { pixelsConverted }
+        return <div className="pixeled">
+            <div style={{backgroundColor: 'gray'}}>
+                { pixelsConverted }
+            </div>
             <h1>Quantity of different colors</h1> 
             <div>
                 {
@@ -115,24 +93,37 @@ function convertPixels(height, width, type, distance, arrayColors) {
 
     const colorDefault = 'black';
 
-    //
-
     var color;
 
+    if (arrayColors && arrayColors[count]) {
+
+        // height = arrayColors
+
+        console.log(arrayColors.length);
+
+    }
+
     return height.map(n => {
-        return <div key={n} style={{ margin: distance - 8 }}>
+        return <div width="100%" key={n} style={{ margin: distance - 8, display: "block ruby" }}>
             {
 
-                width.map(nm => {
+                color = arrayColors && arrayColors[count] ?
 
-                    color = arrayColors ? arrayColors[count++] : colorDefault;
+                    width.map(nm => {
 
-                    return <PixelateItem key={n + '' + nm} 
-                        type={type} 
-                        distance={distance} 
-                        color={`rgba(${color[0]},${color[1]},${color[2]},${(255)})`} />
-                })
-            }
+                        color = arrayColors && arrayColors[count] ? arrayColors[count++] : colorDefault;
+    
+                        return <PixelateItem key={n + '' + nm} 
+                            type={type} 
+                            distance={distance} 
+                            color={`rgba(${color[0]},${color[1]},${color[2]},${(255)})`} />
+                    })
+
+                    :
+
+                    <div></div>
+
+                }
         </div>;
     });
 }
@@ -153,22 +144,26 @@ function paintPixels(img, pixelsToConvert, palette, withPalette) {
     canvas.width = width;
     canvas.height = height;
 
-    const pixelSize = (height / (pixelsToConvert - 1)) + 0.0000000001;
+    const pixelSize = (width / (pixelsToConvert - 1)) + 0.0000000001;
 
     context.drawImage(img, 0, 0, width, height);
 
     if (!isNaN(pixelSize) && pixelSize > 0) {
 
-        for (let y = 0; y < img.height + pixelSize; y += pixelSize) {
-            for (let x = 0; x < img.width + pixelSize; x += pixelSize) {
+        const heightWitPixelSize = height + pixelSize;
+
+        const widthWithPixelSize = width + pixelSize;
+
+        for (let y = 0; y < heightWitPixelSize; y += pixelSize) {
+            for (let x = 0; x < widthWithPixelSize; x += pixelSize) {
                 xColorPick = x;
                 yColorPick = y;
 
                 if (x >= img.width) {
-                    xColorPick = x - (pixelSize - (img.width % pixelSize) / 2) + 1;
+                    xColorPick = x - (pixelSize - (width % pixelSize) / 2) + 1;
                 }
                 if (y >= img.height) {
-                    yColorPick = y - (pixelSize - (img.height % pixelSize) / 2) + 1;
+                    yColorPick = y - (pixelSize - (height % pixelSize) / 2) + 1;
                 }
 
                 let rgba = context.getImageData(xColorPick, yColorPick, 1, 1).data;
