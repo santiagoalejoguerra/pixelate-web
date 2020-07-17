@@ -1,56 +1,20 @@
 import React, { Component } from 'react';
 
-import britta from '../images/britta.png';
 import PixelateGroup from './PixelateGroup';
+import defaultParameters from '../conf/DefaultParameters';
+import imageUtils from '../utils/ImageUtils';
 
 class Main extends Component {
 
-    palette = [
-        [140,143,174],
-        [88,69,99],
-        [62,33,55],
-        [154,99,72],
-        [215,155,125],
-        [245,237,186],
-        [192,199,65],
-        [100,125,52],
-        [228,148,58],
-        [157,48,59],
-        [210,100,113],
-        [112,55,127],
-        [126,196,193],
-        [52,133,157],
-        [23,67,75],
-        [31,14,28],
-        [0,0,0],
-        [255,255,255]
-      ]
+    palette = defaultParameters.paletteSelected;
 
-
-    createImage = src => {
-
-        const image = new Image();
-
-        image.src = src;
-
-        return image;
-
-    }
-
-    state = {
-        withPalette: true,
-        square: false,
-        distance: 1,
-        pixelsToConvert: 20,
-        paletteSelected: this.palette,
-        image: this.createImage(britta)
-    }
+    state = defaultParameters;
 
     handleInputChange = (event) => {
         const target = event.target;
 
         const value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.type === 'file' ? URL.createObjectURL(target.files[0]) : target.name;
+        const name = target.name;
 
         this.setState({
             [name]: value    
@@ -62,20 +26,16 @@ class Main extends Component {
         const target = event.target;
 
         const value = URL.createObjectURL(target.files[0])
-        const name =  target.name;
 
-        const image = this.createImage(value);
+        const image = imageUtils.createImage(value);
 
         image.onload = () => {
 
             this.setState({
-                [name]: value,
                 image: image   
             });
 
         }
-
-        
 
     }
 
@@ -113,21 +73,17 @@ class Main extends Component {
             })})
         }
 
-        //console.log("PALETTE", this.state.paletteSelected);
-
     }
 
     render() {
 
         const { withPalette, square, distance, pixelsToConvert, file, image } = this.state;
-
-       //console.log("file", file);
         
         return (
             <div>
                 <div className="main">
                     <div className="App-img">
-                        <img src={file} className="img" alt="img" />
+                        <img src={image.src} className="img" alt="img" />
                     </div>
                     <div className="parameters">
                         <div>

@@ -13,8 +13,6 @@ class PixelateGroup extends React.Component {
 
         super(props);
 
-        this.createImage();
-
         this.state = {
             distance: 1,
             palette: props.paletteSelected
@@ -24,9 +22,11 @@ class PixelateGroup extends React.Component {
 
     createImage(src) {
 
-        //this.image.src = src;
+        this.image = src || new Image();
 
-        this.image = src;
+        this.image.height = this.image.height | 1;
+
+        this.image.width = this.image.width | 1;
 
     }
 
@@ -35,7 +35,6 @@ class PixelateGroup extends React.Component {
         this.createImage(this.props.image);
 
         const { withPalette, type, distance, pixelsToConvert, paletteSelected } = this.props;
-
 
         const height = [...Array(Math.floor((this.image.height * pixelsToConvert) / this.image.width) + 1).keys()];
 
