@@ -34,15 +34,18 @@ class PixelateGroup extends React.Component {
 
         this.createImage(this.props.image);
 
-        const { withPalette, type, distance, pixelsToConvert, paletteSelected } = this.props;
+        const { withPalette, type, distance, pixelsToConvert, paletteSelected, crop } = this.props;
 
-        const height = [...Array(Math.floor((this.image.height * pixelsToConvert) / this.image.width) + 1).keys()];
+        const cropWidth = crop ? crop.width : this.image.width;
+        const cropHeight = crop ? crop.height : this.image.height;
 
-        const width = [...Array(pixelsToConvert).keys()];
+        const heightPixels = [...Array(Math.floor((cropHeight * pixelsToConvert) / cropWidth) + 1).keys()];
+
+        const widthPixels = [...Array(pixelsToConvert).keys()];
 
         this.arrayColors = [];
 
-        this.arrayColors = paintPixels(this.image, pixelsToConvert, paletteSelected, withPalette);
+        this.arrayColors = paintPixels(this.image, pixelsToConvert, paletteSelected, withPalette, crop);
 
         this.counts = {};
 
@@ -57,7 +60,7 @@ class PixelateGroup extends React.Component {
             
         });
 
-        const pixelsConverted = convertPixels(height, width, type, distance, this.arrayColors);
+        const pixelsConverted = convertPixels(heightPixels, widthPixels, type, distance, this.arrayColors);
 
         const counts = this.counts;
 
@@ -118,7 +121,7 @@ function convertPixels(height, width, type, distance, arrayColors) {
     });
 }
 
-function paintPixels(img, pixelsToConvert, palette, withPalette) {
+function paintPixels(img, pixelsToConvert, palette, withPalette, crop) {
 
     const arrayColors = [];
 
@@ -128,31 +131,36 @@ function paintPixels(img, pixelsToConvert, palette, withPalette) {
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
 
-    const width = img.width;
-    const height = img.height;
+    const width = crop ? crop.width : img.width;
+    const height = crop ? crop.height : img.height;
 
-    canvas.width = width;
-    canvas.height = height;
+    canvas.width = img.width;
+    canvas.height = img.height;
+    
+    const cropY = crop ? crop.y : 0;
+    const cropX = crop ? crop.x : 0;
 
     const pixelSize = (width / (pixelsToConvert - 1)) + 0.0000000001;
 
-    context.drawImage(img, 0, 0, width, height);
+    context.drawImage(img, 0, 0, img.width, img.height);
 
     if (!isNaN(pixelSize) && pixelSize > 0) {
 
-        const heightWitPixelSize = height + pixelSize;
+        const heightWitPixelSize = height + pixelSize + cropY;
 
-        const widthWithPixelSize = width + pixelSize;
+        const widthWithPixelSize = width + pixelSize + cropX;
 
-        for (let y = 0; y < heightWitPixelSize; y += pixelSize) {
-            for (let x = 0; x < widthWithPixelSize; x += pixelSize) {
+        //console.log("pixelSize:", pixelSize, "crop:", cropX, cropY, "size:", width, height, "added:", (width + cropX), "withPixel:", widthWithPixelSize, heightWitPixelSize);
+
+        for (let y = cropY; y < heightWitPixelSize; y += pixelSize) {
+            for (let x = cropX; x < widthWithPixelSize; x += pixelSize) {
                 xColorPick = x;
                 yColorPick = y;
 
-                if (x >= img.width) {
+                if (x >= (width + cropX)) {
                     xColorPick = x - (pixelSize - (width % pixelSize) / 2) + 1;
                 }
-                if (y >= img.height) {
+                if (y >= height) {
                     yColorPick = y - (pixelSize - (height % pixelSize) / 2) + 1;
                 }
 

@@ -4,7 +4,7 @@
 
 .App-img {
   height: 40vmin;
-  pointer-events: none;
+  /* pointer-events: none; */
   float: left;
   width: 25%;
 }

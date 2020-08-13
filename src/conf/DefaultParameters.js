@@ -23,11 +23,14 @@ const palette = [
     [255,255,255]
   ]
 
+const crop = { aspect: 16 / 9 };
+
 export default {
     withPalette: true,
     square: false,
     distance: 1,
-    pixelsToConvert: 20,
+    pixelsToConvert: 5,
     paletteSelected: palette,
-    image: imageUtils.createImage(britta)
+    image: imageUtils.createImage(britta),
+    crop: crop
 }

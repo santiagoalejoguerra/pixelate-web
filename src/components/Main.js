@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import Image from './Image';
 import PixelateGroup from './PixelateGroup';
 import defaultParameters from '../conf/DefaultParameters';
 import imageUtils from '../utils/ImageUtils';
@@ -75,79 +75,94 @@ class Main extends Component {
 
     }
 
+    callbackImgCropped = (imgCropped) => {
+
+        this.setState({ imgCropped });
+
+    }
+
     render() {
 
-        const { withPalette, square, distance, pixelsToConvert, file, image } = this.state;
+        const { withPalette, square, distance, pixelsToConvert, file, image, imgCropped } = this.state;
+
+        console.log("Img cropped:", imgCropped ? imgCropped.crop : '');
         
         return (
-            <div>
-                <div className="main">
-                    <div className="App-img">
-                        <img src={image.src} className="img" alt="img" />
+            <div className="App">
+                <div>
+                    <div className="main">
+                        <div className="App-img">
+                            {/* <img src={image.src} className="img" alt="img" /> */}
+                            {/* <ReactCrop src={image.src} className="img" /> */}
+                            <Image src={image.src} callbackImgCropped={this.callbackImgCropped} />
+                        </div>
+                        <div className="parameters">
+                            <div>
+                                Load image <br />
+                                <input
+                                    name="file" type="file"
+                                    checked={file}
+                                    accept="image/*"
+                                    onChange={this.handleInputChangeFile} />
+                            </div>
+                            <div>
+                                With limited palette? 
+                                <input
+                                    name="withPalette" type="checkbox"
+                                    checked={withPalette}
+                                    onChange={this.handleInputChange} />
+                            </div>
+                            <div>
+                                Square? 
+                                <input
+                                    name="square" type="checkbox"
+                                    checked={square}
+                                    onChange={this.handleInputChange} />
+                            </div>
+                            <div>
+                                Pixels throughout: 
+                                <input
+                                    name="pixelsToConvert" type="number"
+                                    defaultValue={this.state.pixelsToConvert}
+                                    checked={pixelsToConvert}
+                                    onChange={this.handleInputChange} />
+                            </div>
+                        </div>
+                        <div className="parameters">
+                            <div>
+                                Select palette colors
+                                {
+                                    this.palette.map((color, index) => {
+                                        return <div key={color} 
+                                        style={{
+                                            backgroundColor: `rgba(${color[0]},${color[1]},${color[2]},${(255)})`,
+                                            color: `rgba(${255 - color[0]},${255 - color[1]},${255 - color[2]},${(255)})`}} ><input 
+                                            name={color}
+                                            type="checkbox"
+                                            checked={this.state.paletteSelected.find(found => found === color)}
+                                            onChange={this.handleInputChangePalette} />
+                                                <label>{color[0] + " " + color[1] + " " + color[2]}</label>
+                                            </div>
+                                    })
+                                }
+                            </div>
+                        </div>
                     </div>
-                    <div className="parameters">
-                        <div>
-                            Load image <br />
-                            <input
-                                name="file" type="file"
-                                checked={file}
-                                onChange={this.handleInputChangeFile} />
-                        </div>
-                        <div>
-                            With limited palette? 
-                            <input
-                                name="withPalette" type="checkbox"
-                                checked={withPalette}
-                                onChange={this.handleInputChange} />
-                        </div>
-                        <div>
-                            Square? 
-                            <input
-                                name="square" type="checkbox"
-                                checked={square}
-                                onChange={this.handleInputChange} />
-                        </div>
-                        <div>
-                            Pixels throughout: 
-                            <input
-                                name="pixelsToConvert" type="number"
-                                defaultValue={this.state.pixelsToConvert}
-                                checked={pixelsToConvert}
-                                onChange={this.handleInputChange} />
-                        </div>
-                    </div>
-                    <div className="parameters">
-                        <div>
-                            Select palette colors
-                            {
-                                this.palette.map((color, index) => {
-                                    return <div key={color} 
-                                    style={{
-                                        backgroundColor: `rgba(${color[0]},${color[1]},${color[2]},${(255)})`,
-                                        color: `rgba(${255 - color[0]},${255 - color[1]},${255 - color[2]},${(255)})`}} ><input 
-                                        name={color}
-                                        type="checkbox"
-                                        checked={this.state.paletteSelected.find(found => found === color)}
-                                        onChange={this.handleInputChangePalette} />
-                                            <label>{color[0] + " " + color[1] + " " + color[2]}</label>
-                                        </div>
-                                })
-                            }
-                        </div>
-                    </div>
+                    <PixelateGroup 
+                        image={imgCropped && imgCropped.image}
+                        crop={imgCropped && imgCropped.crop}
+                        withPalette={withPalette}
+                        type={square ? 'square' : 'circle'}
+                        distance={distance}
+                        paletteSelected={this.state.paletteSelected}
+                        pixelsToConvert={Number(pixelsToConvert)}
+                    />
                 </div>
-                <PixelateGroup 
-                    image={image}
-                    withPalette={withPalette}
-                    type={square ? 'square' : 'circle'}
-                    distance={distance}
-                    paletteSelected={this.state.paletteSelected}
-                    pixelsToConvert={Number(pixelsToConvert)}
-                />
             </div>
         );
         
     }
 }
+
 
 export default Main;
