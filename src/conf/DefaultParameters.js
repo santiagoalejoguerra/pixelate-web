@@ -29,7 +29,7 @@ export default {
     withPalette: true,
     square: false,
     distance: 1,
-    pixelsToConvert: 5,
+    pixelsToConvert: 60,
     paletteSelected: palette,
     image: imageUtils.createImage(britta),
     crop: crop
