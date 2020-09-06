@@ -1,18 +1,33 @@
-import React, { Component, setState } from 'react';
+import React, { Component } from 'react';
 import imageUtils from '../utils/ImageUtils';
 
-import { Rate } from 'antd';
+import { Rate, message } from 'antd';
 import { Row, Col } from 'antd';
 import Thumbnail from './Thumbnail';
+import UploaderFileImage from './UploaderFileImage';
+
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 
 import {
     LeftCircleOutlined,
     RightCircleOutlined
 } from '@ant-design/icons';
 
-import britta from '../images/britta.png';
+import picture from '../images/britta.png';
+import PreviewProduct from './PreviewProduct';
+
+import Walls from '../conf/WallsConfig.js';
+import walls from '../conf/WallsConfig.js';
 
 class Product extends Component {
+
+    constructor(props) {
+        super(props);
+
+        Walls.map(wall => {
+            this.putPictureOnImage(picture, wall);
+        });
+    }
 
     state = {
         feature: {
@@ -23,7 +38,7 @@ class Product extends Component {
             botons: Math.pow(80, 2)
         },
         currentImage: 0,
-        prueba: 'Pruebita'
+        images: [picture]
     }
 
     next = () => {
@@ -31,14 +46,141 @@ class Product extends Component {
         this.setState({ currentImage });
       }
     
-      prev = () => {
+    prev = () => {
         const currentImage = this.state.currentImage - 1;
         this.setState({ currentImage });
       }
 
+    changeImage = currentImage => () => {
+        console.log(currentImage);
+        this.setState({ currentImage });
+    } 
+
+    updatePictureOnImageCropped = (pictureCropped, wall) => {
+
+        console.log("updatePictureOnImage", pictureCropped, wall);
+
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        const limit = 300;
+
+        canvas.width = limit;
+        canvas.height = limit;
+
+        const crop = pictureCropped.crop;
+
+        const pictureImage = new Image();
+
+        pictureImage.onload = () => {
+
+            const pWidth = pictureImage.width / pictureCropped.image.width;
+            const pHeight = pictureImage.height / pictureCropped.image.height;
+
+            ctx.drawImage(
+                pictureCropped.image, 
+                crop.x * pWidth,
+                crop.y * pHeight,
+                crop.width * pWidth,
+                crop.height * pHeight,
+                0,
+                0,
+                limit,
+                limit
+                );
+
+            const dataUrl = canvas.toDataURL();
+
+            this.setState({ 
+                images: [dataUrl]
+            });
+
+            Walls.map(wall => {
+                this.putPictureOnImage(dataUrl, wall);
+            });
+
+            this.setState({
+                updatePicture: dataUrl
+            });
+
+        };
+
+        console.log("image", pictureCropped.image);
+
+        pictureImage.src = pictureCropped.image.src;
+
+    }
+
+    putPictureOnImage = (picture, wall) => {
+
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        const wallImage = new Image();
+
+        wallImage.src = wall.file;
+
+        wallImage.onload = () => {
+
+            canvas.width = wallImage.width;
+            canvas.height = wallImage.height;
+
+            ctx.drawImage(
+                wallImage, 
+                0, 
+                0, 
+                wallImage.width, 
+                wallImage.height
+                );
+
+            const pictureImage = new Image();
+
+            pictureImage.onload = () => {
+
+                ctx.drawImage(
+                    pictureImage, 
+                    wall.pictureOn.x, 
+                    wall.pictureOn.y, 
+                    wall.pictureOn.width, 
+                    wall.pictureOn.height
+                    );
+
+                const dataUrl = canvas.toDataURL();
+
+                const imagesState = this.state.images;
+
+                imagesState.push(dataUrl);
+    
+                this.setState({ 
+                    images: imagesState
+                });
+
+            }
+
+            pictureImage.src = picture;
+
+        };
+
+    }
+
+    onPreview = async file => {
+        let src = file.url;
+        if (!src) {
+          src = await new Promise(resolve => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file.originFileObj);
+            reader.onload = () => resolve(reader.result);
+          });
+        }
+        const image = new Image();
+        image.src = src;
+        const imgWindow = window.open(src);
+        imgWindow.document.write(image.outerHTML);
+      };
+
     render() {
 
-        const { prueba, currentImage, feature } = this.state;
+        const { currentImage, feature, images, updatePicture } = this.state;
 
         const countBotons = feature.botons;
         const digits = Math.floor(Math.log10(countBotons));
@@ -46,17 +188,20 @@ class Product extends Component {
         const unit = Math.floor(countBotons / zerosDigits);
         const final = unit * zerosDigits;
 
-        console.log(countBotons, digits, unit, zerosDigits, final);
-
-        const images = [ britta, britta ];
+        const uploadButton = (
+            <div>
+              {this.state.loading ? <LoadingOutlined /> : <PlusOutlined />}
+              <div className="ant-upload-text">Upload</div>
+            </div>
+          );
         
         return (
             <div className="Product">
-                <Row justify="space-around" gutter={[48, 32]}>
+                <Row justify="space-around">
                     <Col span={15}>
                         <Row justify="space-around" align="middle" gutter={[48, 32]}>
                             <Col span={4}>
-                                <Thumbnail images={images} currentImage={currentImage}/>
+                                <Thumbnail images={images} currentImage={currentImage} onClick={this.changeImage} />
                             </Col>
                             <Col span={20}>
                                 <Row justify="space-between" align="middle">
@@ -66,7 +211,7 @@ class Product extends Component {
                                         )}
                                     </Col>
                                     <Col span={22}>   
-                                        <img src={images[currentImage]} width="100%"/>
+                                        <PreviewProduct product={updatePicture || picture} images={images} currentImage={currentImage} />
                                     </Col>
                                     <Col span={1} align="center">
                                         {currentImage < images.length - 1 && (
@@ -84,6 +229,18 @@ class Product extends Component {
                         <h3>Cantidad de botonsitos: +{final}</h3>
                         <h1>${feature.price}</h1>
                         <h5>Iva incluido</h5>
+
+                        <h3>Cargá tu imagen</h3>
+                        <Row>
+                            <Col>
+                                <img src={updatePicture || picture} alt="avatar" style={{ width: '300px' }} />
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <UploaderFileImage  putPictureOnImageCropped={this.updatePictureOnImageCropped} walls={walls}  />
+                            </Col>
+                        </Row>
                     </Col>
                 </Row>
                 
@@ -121,7 +278,41 @@ class Product extends Component {
 
     }
 
+    handleChange = info => {
+        if (info.file.status === 'uploading') {
+          this.setState({ loading: true });
+          return;
+        }
+        if (info.file.status === 'done') {
+          // Get this url from response in real world.
+          getBase64(info.file.originFileObj, imageUrl =>
+            this.setState({
+              imageUrl,
+              loading: false,
+            }),
+          );
+        }
+      };
+
 }
+
+function beforeUpload(file) {
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    if (!isJpgOrPng) {
+      message.error('You can only upload JPG/PNG file!');
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error('Image must smaller than 2MB!');
+    }
+    return isJpgOrPng && isLt2M;
+  }
+
+  function getBase64(img, callback) {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result));
+    reader.readAsDataURL(img);
+  }
 
 
 export default Product;

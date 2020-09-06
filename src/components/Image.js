@@ -16,9 +16,10 @@ class Image extends PureComponent {
 
     state = {
         crop: {
+          aspect: 1/1,
           unit: '%',
-          width: 100,
-          height: 100
+          width: 75,
+          height: 75
         },
       };
 
@@ -59,17 +60,11 @@ class Image extends PureComponent {
           crop.width,
           crop.height
         );
-
-        //return { image: image, crop: crop };
     
          return new Promise((resolve, reject) => {
 
-        //     resolve({ image: image, crop: crop });
-
-        //  });
           canvas.toBlob(blob => {
             if (!blob) {
-              //reject(new Error('Canvas is empty'));
               console.error('Canvas is empty');
               return;
             }
@@ -92,6 +87,7 @@ class Image extends PureComponent {
                 <ReactCrop 
                     src={src} 
                     ruleOfThirds
+                    keepSelection
                     onComplete={this.onCropComplete}
                     onImageLoaded={this.onImageLoaded}
                     crop={crop} 

@@ -1,3 +1,25 @@
+body {
+    user-select: none; /* supported by Chrome and Opera */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+}
+
 img {
-    border-radius: 10px;;
+    border-radius: 10px;
+}
+
+img.thumbnail.active {
+    border: 2px solid blue;
+}
+
+img.preview {
+    width: 47vw;
+    height: 47vw;
+}
+
+canvas.preview {
+    width: 47vw;
+    height: 47vw;
 }
