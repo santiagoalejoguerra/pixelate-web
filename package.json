@@ -6,13 +6,9 @@
     "@ant-design/icons": "^4.2.2",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
-    "@testing-library/user-event": "^7.2.1",
     "antd": "^4.5.3",
-    "antd-img-crop": "^3.9.0",
-    "http-server": "^0.12.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-image": "^4.0.3",
     "react-image-crop": "^8.6.4",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.3"
