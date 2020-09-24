@@ -1,0 +1,29 @@
+{
+  "files": {
+    "main.css": "/static/css/main.625995df.chunk.css",
+    "main.js": "/static/js/main.edd2fedd.chunk.js",
+    "main.js.map": "/static/js/main.edd2fedd.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.812c356b.js",
+    "runtime-main.js.map": "/static/js/runtime-main.812c356b.js.map",
+    "static/css/2.c7d65bde.chunk.css": "/static/css/2.c7d65bde.chunk.css",
+    "static/js/2.ef01a779.chunk.js": "/static/js/2.ef01a779.chunk.js",
+    "static/js/2.ef01a779.chunk.js.map": "/static/js/2.ef01a779.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.c8d6ad60e8fc87d74e12c0a7ee36be04.js": "/precache-manifest.c8d6ad60e8fc87d74e12c0a7ee36be04.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/2.c7d65bde.chunk.css.map": "/static/css/2.c7d65bde.chunk.css.map",
+    "static/css/main.625995df.chunk.css.map": "/static/css/main.625995df.chunk.css.map",
+    "static/js/2.ef01a779.chunk.js.LICENSE.txt": "/static/js/2.ef01a779.chunk.js.LICENSE.txt",
+    "static/media/britta.png": "/static/media/britta.65342444.png",
+    "static/media/wall_1.jpg": "/static/media/wall_1.fa841da1.jpg",
+    "static/media/wall_2.jpg": "/static/media/wall_2.0b7a15b6.jpg",
+    "static/media/wall_3.jpg": "/static/media/wall_3.e5c6b3d8.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.812c356b.js",
+    "static/css/2.c7d65bde.chunk.css",
+    "static/js/2.ef01a779.chunk.js",
+    "static/css/main.625995df.chunk.css",
+    "static/js/main.edd2fedd.chunk.js"
+  ]
+}

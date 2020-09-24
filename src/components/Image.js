@@ -8,10 +8,6 @@ class Image extends PureComponent {
 
         super(props);
 
-        //this.callbackImgCropped = props.callbackImgProps;
-
-        console.log("Paso el constructor");
-
     }
 
     state = {
@@ -80,7 +76,7 @@ class Image extends PureComponent {
 
         const { src } = this.props;
 
-        const { crop, croppedImageUrl } = this.state;
+        const { crop } = this.state;
 
         return (
             <div className="App">

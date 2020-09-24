@@ -1,0 +1,228 @@
+:root {  
+  --zero: #ffffff;
+  --primary: #ffa500;
+  --primaryTransparent: #ffedcc;
+  --secondary: #4a08ff;  
+  --secondaryTransparent: #daccff;
+  --thirdy: #3406b3;  
+  --fourty: #d6ff00;
+  --fifty: #96b300;
+  --background-color: #f0f2f5;
+
+  --buttonPrimary: var(--primary);
+  --textPrimary: var(--primaryTransparent);
+  --buttonSecondary: var(--secondaryTransparent);
+  --textSecondary: var(--secondary)
+
+}
+
+.primary {
+  color: var(--primary);
+}
+
+.primaryTransparent {
+  color: var(--primaryTransparent);
+}
+
+.primaryTheme * {
+  color: var(--primaryTransparent);
+  background-color: var(--primary);
+}
+
+.primaryTheme .ant-input-affix-wrapper, .primaryTheme .ant-input-affix-wrapper *, .primaryTheme .ant-input {
+  color: var(--thirdy);
+  background-color: #ffffff;
+}
+
+.secondary {
+  color: var(--secondary);
+}
+
+.secondaryTransparent {
+  color: var(--secondaryTransparent);
+}
+
+.secondaryTheme * {
+  color: var(--secondary);
+  background-color: var(--secondaryTransparent);
+}
+
+html { 
+  scroll-behavior: smooth; 
+}
+
+body {
+  background-color: var(--background-color);
+}
+
+*[id] {
+  scroll-margin-top: 64px;
+}
+
+h1 {
+  font-size: 3em;
+}
+
+.ant-anchor-ink {
+  display: none;
+}
+
+.ant-anchor-wrapper {
+  height: 64px;
+  background-color: var(--primary);
+} 
+
+.ant-anchor-link {
+  height: 64px;
+  padding: 0;
+}
+
+.ant-anchor-link-title {
+  color: var(--primaryTransparent);
+  background-color: var(--primary);
+  line-height: 64px;
+  height: 64px;
+}
+
+.ant-anchor-link-active > .ant-anchor-link-title {
+  color: var(--primary);
+  background-color: var(--primaryTransparent);
+  height: 64px;
+}
+
+.ant-menu {
+  float: right;
+}
+
+.ant-layout-header, .ant-menu {
+  background-color: var(--primary);
+  height: 64px;
+}
+
+.ant-layout-footer {
+  background-color: var(--background-color);
+}
+
+.logo {
+    width: 135px;
+    height: 64px;
+    background-color: var(--primary);
+    float: left;
+    background-image: url('../../images/logo.png') ;
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+
+.site-layout .site-layout-background {
+    background: var(--secondary);
+}
+
+.ant-menu-item .ant-menu-item:hover{
+  background-color: var(--buttonPrimary);
+  color: var(--textPrimary);
+}
+
+.ant-menu-item.ant-menu-item-only-child:not(ant-menu-item-selected) a {
+  color: var(--textPrimary);
+}
+
+.ant-menu-item.ant-menu-item-only-child.ant-menu-item-selected a {
+  color: var(--primary);
+}
+
+.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-selected {
+  border-bottom: 2px solid var(--primary);
+}
+
+.ant-menu-item-selected {
+  background-color: var(--primaryTransparent); 
+}
+
+.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu {
+  margin: 0;
+  padding: 0 20px;
+}
+
+.ant-menu-horizontal > .ant-menu-item, .ant-menu-horizontal > .ant-menu-submenu {
+  border-bottom: 2px solid var(--primary);
+}
+
+.layout-product {
+  text-align: center;
+  padding: 20px;
+}
+
+.layout-info {
+  text-align: center;
+  padding: 20px;
+}
+
+.layout-questions {
+  padding: 20px;
+}
+
+.layout-questions h1, .layout-questions h2 {
+  text-align: center;
+}
+
+.ant-collapse > .ant-collapse-item > .ant-collapse-header .ant-collapse-arrow {
+  font-size: 1.5em;
+  left: 0;
+}
+
+.layout-features {
+  text-align: center;
+  padding: 20px;
+}
+
+.layout-contact {
+  text-align: center;
+  padding: 20px;
+}
+
+.button-contact, .button-contact * { 
+  color: var(--secondaryTransparent);
+  background-color: var(--secondary);
+  border-color: var(--secondary);
+}
+
+.button-contact:hover, .button-contact:hover * { 
+  color: var(--secondary);
+  background-color: var(--secondaryTransparent);
+  border-color: var(--secondaryTransparent);
+}
+
+.tools-view {
+  width: 100%;
+  height: 100%;
+  background-color: var(--secondaryTransparent);
+  float: left;
+  position: relative;
+}
+
+.product-view-canvas {
+  float: left;
+  position: relative;
+}
+
+.ant-tabs-nav-wrap {
+  background-color: var(--primary) !important;
+}
+
+.ant-tabs-tab.ant-tabs-tab-active, .ant-tabs-tab.ant-tabs-tab-active * {
+  background-color: var(--secondaryTransparent) !important;
+  border-bottom: 0px !important;
+}
+
+.ant-tabs-tab, .ant-tabs-tab * {
+  background-color: var(--primary) !important;
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.ant-tabs-tabpane {
+  background-color: var(--secondaryTransparent) !important;
+}
+
+.ant-tabs-top > .ant-tabs-nav, .ant-tabs-bottom > .ant-tabs-nav, .ant-tabs-top > div > .ant-tabs-nav, .ant-tabs-bottom > div > .ant-tabs-nav {
+  margin: 0;
+}
